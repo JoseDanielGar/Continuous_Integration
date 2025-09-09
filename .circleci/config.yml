@@ -28,9 +28,12 @@ jobs:
       - run:
           name: Deploy to Railway App
           command: |
-            cd bankchurn-api 
-            railway up --service=app
-            railway up --detach
+            # RAILWAY_TOKEN, RAILWAY_PROJECT_ID, and RAILWAY_ENV_ID must be set in CircleCI project env vars
+            cd bankchurn-api
+            # Link without prompts
+            railway link -p "$RAILWAY_PROJECT_ID" -e "$RAILWAY_ENV_ID" -s "app"
+            # Deploy to a specific service & environment; stream build logs, then exit
+            railway up --service "app" --environment "$RAILWAY_ENV_ID" --ci
 
 
 tags_only: &tags_only
